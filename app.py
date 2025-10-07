@@ -131,29 +131,26 @@ st.markdown("""
         border-radius: 8px;
         border-left: 4px solid #FC3D21;
     }
-    
-    .report-btn {
-      <button style="
-            background: linear-gradient(135deg, #FC3D21 0%, #e62e1a 100%);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 100%;
-            text-decoration: none;
-            display: inline-block;
-            text-align: center;
-        " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(252, 61, 33, 0.4)';" 
-        onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
-        📊 GENERATE REPORT
-        </button>
-    </a>
-</style>
-""", unsafe_allow_html=True)
+.report-btn {
+    background: linear-gradient(135deg, #FC3D21 0%, #e62e1a 100%) !important;
+    color: white !important;
+    border: none !important;
+    padding: 12px 24px !important;
+    border-radius: 8px !important;
+    font-weight: bold !important;
+    font-size: 1rem !important;
+    transition: all 0.3s ease !important;
+    width: 100% !important;
+    cursor: pointer !important;
+    text-decoration: none !important;
+    display: inline-block !important;
+    text-align: center !important;
+}
+
+.report-btn:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 20px rgba(252, 61, 33, 0.4) !important;
+}
 
 def setup_secrets():
     """Setup API keys securely"""
@@ -978,4 +975,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
