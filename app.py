@@ -849,34 +849,38 @@ def main():
     with tab4:
         create_impactor_2025_scenario()
     
-    with tab5:
-        st.markdown("## 🛰️ 3D ORBITAL VISUALIZATION")
-        
-        st.markdown("""
-        <div class="data-card">
-            <h3 style="color: #0B3D91;">🌍 REAL-TIME ASTEROID TRACKING</h3>
-            <p>Interactive 3D visualization of near-Earth objects and their orbital paths</p>
-            <p><strong>Red orbits:</strong> Potentially hazardous asteroids</p>
-            <p><strong>Green orbits:</strong> Safe asteroids</p>
-        </div>
-        """, unsafe_allow_html=True)
-        
-        with st.spinner("Generating 3D orbital visualization..."):
-            fig_3d = generate_3d_orbital_map(neo_data['data'])
-            st.plotly_chart(fig_3d, use_container_width=True)
-        
-        st.markdown("""
-        <div class="data-card">
-            <h4>🎯 How to Use:</h4>
-            <ul>
-                <li><strong>Rotate:</strong> Click and drag to rotate the view</li>
-                <li><strong>Zoom:</strong> Use mouse wheel to zoom in/out</li>
-                <li><strong>Pan:</strong> Hold Shift and drag to pan</li>
-                <li><strong>Hover:</strong> Hover over asteroids for details</li>
-            </ul>
-        </div>
-        """, unsafe_allow_html=True)
+    # في جزء الـ 3D Orbital Map فقط:
+
+with tab5:
+    st.markdown("## 🛰️ 3D ORBITAL VISUALIZATION")
     
+    st.markdown("""
+    <div class="data-card">
+        <h3 style="color: #0B3D91;">🌍 REAL-TIME ASTEROID TRACKING</h3>
+        <p>Interactive 3D visualization of near-Earth objects and their orbital paths</p>
+        <p><strong>Red orbits:</strong> Potentially hazardous asteroids</p>
+        <p><strong>Green orbits:</strong> Safe asteroids</p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    with st.spinner("Generating 3D orbital visualization..."):
+        fig_3d = generate_3d_orbital_map(neo_data['data'])
+        st.plotly_chart(fig_3d, use_container_width=True)
+        
+        # تشغيل الصوت تلقائياً
+        play_orbit_sound()
+    
+    st.markdown("""
+    <div class="data-card">
+        <h4>🎯 How to Use:</h4>
+        <ul>
+            <li><strong>Rotate:</strong> Click and drag to rotate the view</li>
+            <li><strong>Zoom:</strong> Use mouse wheel to zoom in/out</li>
+            <li><strong>Pan:</strong> Hold Shift and drag to pan</li>
+            <li><strong>Hover:</strong> Hover over asteroids for details</li>
+        </ul>
+    </div>
+    """, unsafe_allow_html=True)
     with tab6:
         st.markdown("## 📊 NASA DATA ANALYSIS")
         
@@ -974,3 +978,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
