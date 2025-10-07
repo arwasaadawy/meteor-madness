@@ -99,7 +99,7 @@ st.markdown("""
         background: linear-gradient(135deg, #fdcb6e 0%, #e17055 100%);
         color: white;
         padding: 1.5rem;
-        border-radius: 12px;
+        border-radius: 1212px;
         text-align: center;
         margin: 1rem 0;
     }
@@ -130,6 +130,23 @@ st.markdown("""
         background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
         border-radius: 8px;
         border-left: 4px solid #FC3D21;
+    }
+    
+    .report-btn {
+        background: linear-gradient(135deg, #00b894 0%, #00a085 100%) !important;
+        color: white !important;
+        border: none !important;
+        padding: 15px 30px !important;
+        border-radius: 8px !important;
+        font-weight: bold !important;
+        font-size: 1.1rem !important;
+        transition: all 0.3s ease !important;
+        width: 100% !important;
+    }
+    
+    .report-btn:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 6px 20px rgba(0, 184, 148, 0.4) !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -628,6 +645,7 @@ def main():
     
     neo_data = fetch_live_neo_data()
     
+    # تبويبات بس من غير تبويب الريبورت
     tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
         "📡 LIVE DASHBOARD", 
         "💥 IMPACT SIMULATOR", 
@@ -647,8 +665,17 @@ def main():
                 st.rerun()
         
         with col2:
-            if st.button("📊 GENERATE REPORT", use_container_width=True):
-                st.info("📄 Threat assessment report generated")
+            # زر GENERATE REPORT واحد بس
+            REPORT_URL = "https://drive.google.com/file/d/1tCIIT6jPK7OgKgM4opSibf7HXOviWZkr/view"
+            
+            # استخدام markdown علشان زر يفتح اللينك مباشرة
+            st.markdown(f"""
+            <a href="{REPORT_URL}" target="_blank" style="text-decoration: none;">
+                <button class="report-btn">
+                    📊 GENERATE REPORT
+                </button>
+            </a>
+            """, unsafe_allow_html=True)
         
         with col3:
             if st.button("🚨 ALERT STATUS", use_container_width=True):
@@ -940,7 +967,7 @@ def main():
                 eq_df[['place', 'magnitude', 'depth', 'time']].style.format({
                     'magnitude': '{:.1f}',
                     'depth': '{:.1f} km'
-                }).background_gradient(subset=['magnitude'], cmap='Reds'),
+                }),
                 use_container_width=True,
                 height=300
             )
