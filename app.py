@@ -133,21 +133,25 @@ st.markdown("""
     }
     
     .report-btn {
-        background: linear-gradient(135deg, #00b894 0%, #00a085 100%) !important;
-        color: white !important;
-        border: none !important;
-        padding: 15px 30px !important;
-        border-radius: 8px !important;
-        font-weight: bold !important;
-        font-size: 1.1rem !important;
-        transition: all 0.3s ease !important;
-        width: 100% !important;
-    }
-    
-    .report-btn:hover {
-        transform: translateY(-2px) !important;
-        box-shadow: 0 6px 20px rgba(0, 184, 148, 0.4) !important;
-    }
+      <button style="
+            background: linear-gradient(135deg, #FC3D21 0%, #e62e1a 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(252, 61, 33, 0.4)';" 
+        onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+        📊 GENERATE REPORT
+        </button>
+    </a>
 </style>
 """, unsafe_allow_html=True)
 
@@ -974,3 +978,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
