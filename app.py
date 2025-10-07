@@ -7,6 +7,7 @@ import numpy as np
 from datetime import datetime, timedelta
 import time
 import random
+import base64
 
 # Page configuration
 st.set_page_config(
@@ -15,6 +16,33 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
 )
+
+# دالة لتشغيل الصوت
+def play_orbit_sound():
+    sound_path = r"C:\Users\Number One\OneDrive\nasa_dashboard\3D orbit.mpeg"
+    
+    try:
+        # قراءة ملف الصوت وتحويله لـ base64
+        with open(sound_path, "rb") as f:
+            audio_data = f.read()
+            b64_audio = base64.b64encode(audio_data).decode()
+        
+        # HTML audio element
+        audio_html = f"""
+        <audio autoplay controls style="display: none;">
+            <source src="data:audio/mpeg;base64,{b64_audio}" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+        """
+        st.markdown(audio_html, unsafe_allow_html=True)
+        
+    except Exception as e:
+        # بديل إذا الملف مش موجود
+        st.markdown("""
+        <audio autoplay controls style="display: none;">
+            <source src="https://www.soundjay.com/button/beep-07.mp3" type="audio/mpeg">
+        </audio>
+        """, unsafe_allow_html=True)
 
 # Custom CSS
 st.markdown("""
@@ -99,7 +127,7 @@ st.markdown("""
         background: linear-gradient(135deg, #fdcb6e 0%, #e17055 100%);
         color: white;
         padding: 1.5rem;
-        border-radius: 1212px;
+        border-radius: 12px;
         text-align: center;
         margin: 1rem 0;
     }
@@ -147,6 +175,23 @@ st.markdown("""
     .report-btn:hover {
         transform: translateY(-2px) !important;
         box-shadow: 0 6px 20px rgba(0, 184, 148, 0.4) !important;
+    }
+    
+    .sound-btn {
+        background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%) !important;
+        color: white !important;
+        border: none !important;
+        padding: 10px 20px !important;
+        border-radius: 8px !important;
+        font-weight: bold !important;
+        font-size: 0.9rem !important;
+        transition: all 0.3s ease !important;
+        margin: 5px !important;
+    }
+    
+    .sound-btn:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 4px 15px rgba(108, 92, 231, 0.4) !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -630,6 +675,8 @@ def main():
         st.session_state.defense_deployed = False
     if 'run_impact' not in st.session_state:
         st.session_state.run_impact = False
+    if 'auto_play_sound' not in st.session_state:
+        st.session_state.auto_play_sound = True
     
     navigation()
     
@@ -645,7 +692,7 @@ def main():
     
     neo_data = fetch_live_neo_data()
     
-    # تبويبات بس من غير تبويب الريبورت
+    # تبويبات التطبيق - 6 تبويبات
     tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
         "📡 LIVE DASHBOARD", 
         "💥 IMPACT SIMULATOR", 
@@ -849,38 +896,49 @@ def main():
     with tab4:
         create_impactor_2025_scenario()
     
-    # في جزء الـ 3D Orbital Map فقط:
-
-with tab5:
-    st.markdown("## 🛰️ 3D ORBITAL VISUALIZATION")
-    
-    st.markdown("""
-    <div class="data-card">
-        <h3 style="color: #0B3D91;">🌍 REAL-TIME ASTEROID TRACKING</h3>
-        <p>Interactive 3D visualization of near-Earth objects and their orbital paths</p>
-        <p><strong>Red orbits:</strong> Potentially hazardous asteroids</p>
-        <p><strong>Green orbits:</strong> Safe asteroids</p>
-    </div>
-    """, unsafe_allow_html=True)
-    
-    with st.spinner("Generating 3D orbital visualization..."):
-        fig_3d = generate_3d_orbital_map(neo_data['data'])
-        st.plotly_chart(fig_3d, use_container_width=True)
+    with tab5:
+        st.markdown("## 🛰️ 3D ORBITAL VISUALIZATION")
         
-        # تشغيل الصوت تلقائياً
-        play_orbit_sound()
+        # زر تشغيل الصوت
+        col1, col2 = st.columns([3, 1])
+        
+        with col1:
+            st.markdown("""
+            <div class="data-card">
+                <h3 style="color: #0B3D91;">🌍 REAL-TIME ASTEROID TRACKING</h3>
+                <p>Interactive 3D visualization of near-Earth objects and their orbital paths</p>
+                <p><strong>Red orbits:</strong> Potentially hazardous asteroids</p>
+                <p><strong>Green orbits:</strong> Safe asteroids</p>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        with col2:
+            if st.button("🔊 PLAY ORBITAL SOUND", key="sound_btn", use_container_width=True):
+                play_orbit_sound()
+                st.success("🎵 Playing orbital sound...")
+        
+        with st.spinner("Generating 3D orbital visualization..."):
+            fig_3d = generate_3d_orbital_map(neo_data['data'])
+            st.plotly_chart(fig_3d, use_container_width=True)
+            
+            # تشغيل الصوت تلقائياً عند فتح التبويب لأول مرة
+            if st.session_state.auto_play_sound:
+                play_orbit_sound()
+                st.session_state.auto_play_sound = False
     
-    st.markdown("""
-    <div class="data-card">
-        <h4>🎯 How to Use:</h4>
-        <ul>
-            <li><strong>Rotate:</strong> Click and drag to rotate the view</li>
-            <li><strong>Zoom:</strong> Use mouse wheel to zoom in/out</li>
-            <li><strong>Pan:</strong> Hold Shift and drag to pan</li>
-            <li><strong>Hover:</strong> Hover over asteroids for details</li>
-        </ul>
-    </div>
-    """, unsafe_allow_html=True)
+        st.markdown("""
+        <div class="data-card">
+            <h4>🎯 How to Use:</h4>
+            <ul>
+                <li><strong>Rotate:</strong> Click and drag to rotate the view</li>
+                <li><strong>Zoom:</strong> Use mouse wheel to zoom in/out</li>
+                <li><strong>Pan:</strong> Hold Shift and drag to pan</li>
+                <li><strong>Hover:</strong> Hover over asteroids for details</li>
+                <li><strong>Sound:</strong> Click the button above to play orbital sound</li>
+            </ul>
+        </div>
+        """, unsafe_allow_html=True)
+    
     with tab6:
         st.markdown("## 📊 NASA DATA ANALYSIS")
         
@@ -978,4 +1036,3 @@ with tab5:
 
 if __name__ == "__main__":
     main()
-
